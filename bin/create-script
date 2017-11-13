@@ -1,0 +1,56 @@
+#!/bin/bash
+# create-script
+# this script creates a new bash script, sets permissions, 
+# adds shebang and opens the file in Sublime text
+
+scriptname="$1"
+bindir="${HOME}/code/shell-scripts/bin"
+filename="${bindir}/${scriptname}"
+
+#Exit if no argument
+if [[ ! $scriptname ]]; then
+    printf "  ~create-script~: Error: Missing argument: script file name.\n" >&2
+    exit 1
+fi
+
+#Create directory if non-existent
+if [[ ! -d "${bindir}" ]]; then
+    printf "  ~create-script~: Bin directory \"${bindir}\" doesn't exist...\n" 
+    if mkdir -p $bindir; then
+        printf "  ~create-script~: Created directory \"${bindir}\"\n"
+    else
+        printf "  ~create-script~: Error: Failed to create directory \"${bindir}\".\n" >&2
+        exit 1
+    fi
+fi
+
+#Exit if the script file exists already else create the file
+if [[ -e "$filename" ]]; then
+    printf "  ~create-script~: Error: file \"${scriptname}\" already exists\n  ~create-script~: to make the file executable use:\n        \"chmod u+x ${filename}\"\n" >&2
+    exit 1
+else
+	if touch "$filename"; then 
+		printf "  ~create-script~: Created the script file: \"${scriptname}\" in \"${bindir}\"\n"
+	else
+		printf "  ~create-script~: Error: Failed to create the script file: \"${scriptname}\" in \"${bindir}\"\n" >&2
+		exit 1
+	fi
+fi
+
+#Make the newly created file executable
+if chmod u+x $filename; then
+    printf "  ~create-script~: Made the script file \"${scriptname}\" executable.\n"
+    #Add shebang
+    if echo "#!/bin/bash" >> "$filename"; then
+    	printf "  ~create-script~: Added shebang \"#!/bin/bash\" to the script\n"
+    fi
+
+    #open using sublime
+    if subl $filename; then
+    	printf "  ~create-script~: Opening the script file in Sublime Text...\n"
+    fi
+    exit 0
+else
+	printf "  ~create-script~: Error: Failed to make the script file \"${scriptname}\" executable.\n" >&2
+	exit 1
+fi

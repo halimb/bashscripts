@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Count the number of files in a given directory
+
+directory=$1
+
+# Check if an argument has been passed
+if [[ ! "${directory}" ]]; then
+	printf "\t_countfiles_: Error: Missing argument: directory name."
+	exit 1
+fi
+
+# Check if the provided argument is a directory
+if [[ ! -d "${directory}" ]]; then
+	printf "\t_countfiles_: Error: \"${directory}\" is not a directory."
+	exit 1
+fi
+
+count=$(ls -l -d ${directory}/*/ | wc --lines)
+echo "${count}"
+
+

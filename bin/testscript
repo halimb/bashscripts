@@ -1,0 +1,4 @@
+#!/bin/bash
+test="bla"
+echo "test variable ${test}"
+exit 0

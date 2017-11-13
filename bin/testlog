@@ -1,0 +1,24 @@
+#!/bin/bash -x
+
+#ask user for input
+read -p "Enter a note:" note
+
+#get the date
+date=$(date)
+
+#the topic of the note file
+topic="$1"
+#store the complete path to the new file in a variable
+filename="${HOME}/code/shell-scripts/${topic}_note.txt"
+
+if [[ $note ]]; then
+    #store user input next to the date and time of execution in the log file
+    echo $date $note >> "$filename"
+    #notify the user of the previous operation
+    echo Wrote: \'$note\', to file $filename
+    exit 0
+else
+    echo error: no input!
+    exit -1
+fi
+
