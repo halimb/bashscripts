@@ -5,14 +5,20 @@ while getopts ":w:x:y:" word
 do
 	case "${word}" in
 		w)
-			echo "option w = ${OPTARG}";;
+			echo "option w = ${OPTARG}"
+			;;
 		x)
-			echo "option x = ${OPTARG}";;
+			echo "option x = ${OPTARG}"
+			;;
 		y)
-			echo "option y = ${OPTARG}";;
+			echo "option y = ${OPTARG}"
+			;;
+		# Handle illegal flags
 		?)
-			echo "invalid flag: \"${OPTARG}\"";;
-	esac
+			echo "invalid flag: \"${OPTARG}\""
+			exit 1
+			;;
+	esac 
 done
 
 # Shift the arguments array by the number of option arguments,
