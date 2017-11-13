@@ -1,4 +1,6 @@
 #!/bin/bash
+
+# Loop through flags -w -x and -y
 while getopts ":w:x:y:" word
 do
 	case "${word}" in
@@ -12,3 +14,10 @@ do
 			echo "invalid flag: \"${OPTARG}\"";;
 	esac
 done
+
+# Shift the arguments array by the number of option arguments,
+# leaving only the non option args (OPTIND stores the next option index)
+shift $(( OPTIND - 1 ))
+
+# echo the first non option argument
+echo "argument: $1"
