@@ -1,0 +1,4 @@
+#!/bin/bash
+declare -i num
+num="$1"
+(( $num )) && echo "positive integer! :)" || echo "not a positie integer... :(" 
