@@ -1,0 +1,14 @@
+#!/bin/bash
+while getopts ":w:x:y:" word
+do
+	case "${word}" in
+		w)
+			echo "option w = ${OPTARG}";;
+		x)
+			echo "option x = ${OPTARG}";;
+		y)
+			echo "option y = ${OPTARG}";;
+		?)
+			echo "invalid flag: \"${OPTARG}\"";;
+	esac
+done

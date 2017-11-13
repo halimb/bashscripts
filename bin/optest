@@ -1,0 +1,7 @@
+#!/bin/bash
+opt=getopts "w"
+if [[ "${opt}" ]]; then
+	echo "option w = ${OPTARG}"
+else
+	echo "no option -w!"
+fi
