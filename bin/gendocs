@@ -1,5 +1,81 @@
 #!/bin/bash
-emploitic="${HOME}/work/emploitic"
-components=$(ls ${emploitic}/components/*/)
-echo $components > $HOME/logs/components
+
+printHelp () {
+	cat <<HELP
+
+gendocs [emploiticdir] [mkdocsdir]
+
+generate markdown documentation files for emploitic.
+
+	emploiticdir: the pathname to emploitic source code directory.
+	mkdocsdir: the pathname to the mkdocs documentation project directory.
+
+HELP
+}
+
+[[ $# -ne 2 ]] && printHelp && printf "\nError: incorrect number of arguments $#\n" && exit 1
+
+declare -a componentsList=
+declare -a modulesList=
+declare -a emplibList=
+
+declare -A prefs=([components]="com_" [modules]="mod_" [emplib]="${paths[emplib]}")
+declare -A paths=([components]="components" [modules]="modules" [emplib]="libraries/emploitic")
+declare -A finalDocsList=([components]=${componentsList} [modules]=${modulesList} [emplibs]=${emplibList})
+
+main=$1
+docs=$2
+
+prefix=
+subdir=
+
+# params: $1: emplib, component or module directory pathname
+# returns a emplib, component or module subdirectory name stripped from its prefix
+strip () {
+	subdir=$1
+
+	# get the basename of the subdirectory
+	subdir=$(basename $subdir) 
+	
+	# if any, remove the 'com_' or 'mod_' prefix
+	[[ $prefix ]] && subdir=${subdir##*"$prefix"} 
+}
+
+# returns a list of subdirectories
+# params: $1: doc subject (modules || components || emploitic)
+getSubdirs () {
+	prefix=${prefs[$1]}
+	parent="${main}/${paths[$1]}"
+	subdirectories=($(ls -d ${parent}/*/))
+	tempArr=
+	# get subdirectories stripped names
+	for d in ${subdirectories[@]}; do
+		strip $d
+		tempArr+="$subdir";
+	done
+
+	# Store tempArr into the final list for the corresponding doc
+	case $1 in
+		modules)
+			modulesList=$tempArr
+			;;
+		components)
+			componentsList=$tempArr
+			;;
+		emplib)
+			emplibList=$tempArr
+			;;
+	esac
+}
+
+getSubdirs "components" 
+getSubdirs "modules" 
+getSubdirs "emplib"
+
+for el in ${emplibList[@]}; do 
+	echo $el;
+done
+
 exit 0
+
+# TODO!: add each directory name to its corresponding list
