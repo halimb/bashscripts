@@ -1,29 +1,28 @@
 #!/bin/bash
 
 # Loop through flags -w -x and -y
-while getopts ":w:x:y:" word
-do
-	case "${word}" in
-		w)
-			echo "option w = ${OPTARG}"
-			;;
-		x)
-			echo "option x = ${OPTARG}"
-			;;
-		y)
-			echo "option y = ${OPTARG}"
-			;;
-		# Handle illegal flags
-		?)
-			echo "invalid flag: \"${OPTARG}\""
-			exit 1
-			;;
-	esac 
-done
+[[ getopts ]]
+# 	case "${word}" in
+# 		w)
+# 			echo "option w = ${OPTARG}"
+# 			;;
+# 		x)
+# 			echo "option x = ${OPTARG}"
+# 			;;
+# 		y)
+# 			echo "option y = ${OPTARG}"
+# 			;;
+# 		# Handle illegal flags
+# 		?)
+# 			echo "invalid flag: \"${OPTARG}\""
+# 			exit 1
+# 			;;
+# 	esac 
 
-# Shift the arguments array by the number of option arguments,
-# leaving only the non option args (OPTIND stores the next option index)
-shift $(( OPTIND - 1 ))
 
-# echo the first non option argument
-echo "argument: $1"
+# # Shift the arguments array by the number of option arguments,
+# # leaving only the non option args (OPTIND stores the next option index)
+# shift $(( OPTIND - 1 ))
+
+# # echo the first non option argument
+# echo "argument: $1"

@@ -1,0 +1,5 @@
+#!/bin/bash
+emploitic="${HOME}/work/emploitic"
+components=$(ls ${emploitic}/components/*/)
+echo $components > $HOME/logs/components
+exit 0
