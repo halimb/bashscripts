@@ -18,6 +18,7 @@ HELP
 declare -a componentsList=
 declare -a modulesList=
 declare -a emplibList=
+declare -a docsets=("components" "modules" "emplib")
 
 declare -A prefs=([components]="com_" [modules]="mod_" [emplib]="${paths[emplib]}")
 declare -A paths=([components]="components" [modules]="modules" [emplib]="libraries/emploitic")
@@ -29,8 +30,8 @@ docs=$2
 prefix=
 subdir=
 
-# params: $1: emplib, component or module directory pathname
 # returns a emplib, component or module subdirectory name stripped from its prefix
+# params: $1: emplib, component or module directory pathname
 strip () {
 	subdir=$1
 
@@ -41,41 +42,48 @@ strip () {
 	[[ $prefix ]] && subdir=${subdir##*"$prefix"} 
 }
 
-# returns a list of subdirectories
-# params: $1: doc subject (modules || components || emploitic)
+# get a list of relevant subdirectories to document for each of:
+# (modules || components || emploitic)
 getSubdirs () {
-	prefix=${prefs[$1]}
-	parent="${main}/${paths[$1]}"
-	subdirectories=($(ls -d ${parent}/*/))
 	tempArr=
-	# get subdirectories stripped names
-	for d in ${subdirectories[@]}; do
-		strip $d
-		tempArr+="$subdir";
-	done
+	for d in ${docsets[@]}; do
+		printf "docset => ${d}\n"
+		# set the prefix and target directory
+		prefix=${prefs[$d]}
+		target="${main}/${paths[$d]}"
 
-	# Store tempArr into the final list for the corresponding doc
-	case $1 in
-		modules)
-			modulesList=$tempArr
-			;;
-		components)
-			componentsList=$tempArr
-			;;
-		emplib)
-			emplibList=$tempArr
-			;;
-	esac
+		# get subdirectories of target dir
+		subdirectories=($(ls -d ${target}/*/))
+		
+		# get the stripped names of target's 
+		# subdirectories and store them in tempArr
+		for sd in ${subdirectories[@]}; do
+			printf "\t${sd}"
+			strip $sd
+			tempArr+=" $subdir";
+			printf "%25s\n" "=>    ${subdir}"
+		done
+		printf "\n"
+
+		# Store tempArr into the corresponding docset
+		case $d in
+			modules)
+				modulesList=$tempArr
+				;;
+			components)
+				componentsList=$tempArr
+				;;
+			emplib)
+				emplibList=$tempArr
+				;;
+		esac;
+	done
 }
 
-getSubdirs "components" 
-getSubdirs "modules" 
-getSubdirs "emplib"
+getSubdirs
 
 for el in ${emplibList[@]}; do 
 	echo $el;
 done
 
 exit 0
-
-# TODO!: add each directory name to its corresponding list
