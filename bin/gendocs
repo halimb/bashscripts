@@ -5,10 +5,6 @@ printHelp () {
 
 gendocs [emploiticdir] [mkdocsdir]
 
-generate markdown documentation files for emploitic.
-
-	emploiticdir: the pathname to emploitic source code directory.
-	mkdocsdir: the pathname to the mkdocs documentation project directory.
 
 HELP
 }
