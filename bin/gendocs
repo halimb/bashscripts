@@ -3,7 +3,6 @@
 printHelp () {
 	cat <<HELP
 
-gendocs [emploiticdir] [mkdocsdir]
 
 
 HELP
